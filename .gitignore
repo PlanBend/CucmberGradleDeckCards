@@ -1,0 +1,13 @@
+### JetBrains IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+
+### VS Code ###
+.vscode/
+
+### Gradle Build tool ###
+.gradle
+build/
