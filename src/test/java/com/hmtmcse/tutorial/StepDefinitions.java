@@ -1,10 +1,17 @@
 package com.hmtmcse.tutorial;
 
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class StepDefinitions {
+
+    @Before
+    public void setup() {
+        System.out.println("Setup Somethings");
+    }
 
     @Given("Open google.com")
     public void open_google_com() {
@@ -26,6 +33,11 @@ public class StepDefinitions {
     public void result_should_be(Integer result) {
         System.out.println("Result " + result);
         System.out.println("============================================================");
+    }
+
+    @After
+    public void end() {
+        System.out.println("Process End");
     }
 
 }
