@@ -11,3 +11,4 @@ out/
 ### Gradle Build tool ###
 .gradle
 build/
+reports/*

@@ -11,6 +11,9 @@ project.ext {
 
 dependencies {
     testImplementation 'io.cucumber:cucumber-java:' + cucumberVersion
+    testImplementation 'io.cucumber:cucumber-junit:' + cucumberVersion
+    implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
+    implementation 'org.seleniumhq.selenium:selenium-chrome-driver:3.141.59'
 }
 
 configurations {

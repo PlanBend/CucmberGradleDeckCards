@@ -9,8 +9,8 @@ Feature: Test addition using Google Calculator
 
     Examples:
       | firstNumber | secondNumber | result |
-      | 1           | 1            | 2      |
       | 6           | 6            | 12     |
+      | 6           | 2            | 9      |
       | 8           | 5            | 13     |
 
 
