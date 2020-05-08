@@ -34,7 +34,7 @@ public class StepDefinitions {
     @When("Entering number {int} and {int}")
     public void entering_number_and(Integer first, Integer second) {
         WebElement googleTextBox = webDriver.findElement(By.className("gLFyf"));
-        googleTextBox.sendKeys(first + "+" + second);
+        googleTextBox.sendKeys(first + " + " + second);
     }
 
     @When("Press enter")
