@@ -48,16 +48,16 @@ public class CardDeckSteps {
     }
 
     @When("draw {int} cards")
-    public void drawSomeNumbersOfCards(int numberOfCardsToDraw) {
+    public void drawSomeNumberOfCards(int numberOfCardsToDraw) {
         DrawCardDto drawCardRes = drawCards(numberOfCardsToDraw);
         sharedData.drawCardDto = drawCardRes;
         if (drawCardRes.getError() != null)
             log.error("Something went wrong during drawing cards, please take a look, error:" + drawCardRes.getError());
     }
 
-    @Then("deck cards left is {int}")
+    @Then("{int} cards left in deck")
     public void deckCardsLeftIsRemains(int expectedRemains) {
-        assertTrue(String.format("Expected card remains is - %d, actual is - %d", expectedRemains, sharedData.drawCardDto.getRemaining()),
+        assertTrue(String.format("Expected cards remained is - %d, actual is - %d", expectedRemains, sharedData.drawCardDto.getRemaining()),
                 expectedRemains == sharedData.drawCardDto.getRemaining());
     }
 
@@ -75,7 +75,7 @@ public class CardDeckSteps {
     public void checkIfDeckContainsOnly(String listOfCards) {
         Set<String> expectedCards = Arrays.stream(listOfCards.split(",")).collect(Collectors.toSet());
         assertTrue("Looks like expected cards list is empty", expectedCards.size() > 0);
-        drawSomeNumbersOfCards(sharedData.newDeckData.getRemaining().intValue());
+        drawSomeNumberOfCards(sharedData.newDeckData.getRemaining().intValue());
         List<CardDto> cards = sharedData.drawCardDto.getCards();
         Set<String> cardsInDeck = cards.stream().map(card -> card.getCode()).collect(Collectors.toSet());
         log.info("Actual deck cards set is - " + cardsInDeck);
@@ -84,10 +84,10 @@ public class CardDeckSteps {
                 cardsInDeck.size() == expectedCards.size() && cardsInDeck.removeAll(expectedCards) && cardsInDeck.size() == 0);
     }
 
-    @Then("check if deck not contains used cards")
+    @Then("deck should not contain drawn cards")
     public void checkIfDeckNotContainsUsedCards() {
         Set<String> usedCards = sharedData.drawCardDto.getCards().stream().map(card -> card.getCode()).collect(Collectors.toSet());
-        drawSomeNumbersOfCards(sharedData.drawCardDto.getRemaining().intValue());
+        drawSomeNumberOfCards(sharedData.drawCardDto.getRemaining().intValue());
         Set<String> remainingCards = sharedData.drawCardDto.getCards().stream().map(card -> card.getCode()).collect(Collectors.toSet());
         log.info("Used cards -" + usedCards);
         log.info("Remaining cards -" + remainingCards);
