@@ -1,16 +1,18 @@
 package org.deckOfCardTests;
 
 import com.google.inject.Inject;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.http.ContentType;
 import lombok.extern.slf4j.Slf4j;
 import org.deckOfCardTests.Config.Endpoints;
 import org.deckOfCardTests.ResponceDto.CardDto;
 import org.deckOfCardTests.ResponceDto.DrawCardDto;
 import org.deckOfCardTests.ResponceDto.NewDeckDto;
 import org.junit.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +24,7 @@ import static org.junit.Assert.assertTrue;
 
 @Slf4j
 public class CardDeckSteps {
+
     @Inject
     private SharedData sharedData;
 
@@ -41,7 +44,7 @@ public class CardDeckSteps {
         NewDeckDto newDeckData = getNewShuffledDeckId();
         assertTrue("Expected successful result of getting new shuffled deck, but it fails, please take a look", newDeckData.getSuccess().booleanValue());
         sharedData.newDeckData = newDeckData;
-        System.out.println("New deck saved to shared " + newDeckData.getDeckId());
+        log.info("New deck saved to shared " + newDeckData.getDeckId());
     }
 
     @When("draw {int} cards")
@@ -75,8 +78,8 @@ public class CardDeckSteps {
         drawSomeNumbersOfCards(sharedData.newDeckData.getRemaining().intValue());
         List<CardDto> cards = sharedData.drawCardDto.getCards();
         Set<String> cardsInDeck = cards.stream().map(card -> card.getCode()).collect(Collectors.toSet());
-        System.out.println("Actual deck cards set is - " + cardsInDeck);
-        System.out.println("Expected deck cards set is - " + expectedCards);
+        log.info("Actual deck cards set is - " + cardsInDeck);
+        log.info("Expected deck cards set is - " + expectedCards);
         assertTrue(String.format("Expected list of cards %s differs from actual %s,", expectedCards, cardsInDeck),
                 cardsInDeck.size() == expectedCards.size() && cardsInDeck.removeAll(expectedCards) && cardsInDeck.size() == 0);
     }
@@ -86,8 +89,8 @@ public class CardDeckSteps {
         Set<String> usedCards = sharedData.drawCardDto.getCards().stream().map(card -> card.getCode()).collect(Collectors.toSet());
         drawSomeNumbersOfCards(sharedData.drawCardDto.getRemaining().intValue());
         Set<String> remainingCards = sharedData.drawCardDto.getCards().stream().map(card -> card.getCode()).collect(Collectors.toSet());
-        System.out.println("Used cards -" + usedCards);
-        System.out.println("Remaining cards -" + remainingCards);
+        log.info("Used cards -" + usedCards);
+        log.info("Remaining cards -" + remainingCards);
         int remainingCardsSize = remainingCards.size();
         remainingCards.removeAll(usedCards);
         assertTrue(String.format("Some cards still in deck, used cards -  %s;\r\n remainig cards -  %s;", usedCards, remainingCards),
@@ -96,31 +99,36 @@ public class CardDeckSteps {
     }
 
     private NewDeckDto getNewDeck() {
+        log.info("Try to get new deck by url - "+Endpoints.newDeckUrl);
         NewDeckDto newDeckData = given().get(Endpoints.newDeckUrl).getBody().as(NewDeckDto.class);
         return newDeckData;
     }
 
     private NewDeckDto getNewDeck(String cardsList) {
-        System.out.println("Get new deck with cards:" + cardsList);
+        log.info("Get new deck with cards:" + cardsList);
         NewDeckDto newDeckData = given().get(Endpoints.newShuffledLimitedDeckUrl + cardsList).getBody().as(NewDeckDto.class);
         return newDeckData;
     }
 
     private NewDeckDto getCurrentDeckState() {
-        return given().get(Endpoints.currentDeckStateUrl.replace("<<deck_id>>", sharedData.newDeckData.getDeckId())).getBody().as(NewDeckDto.class);
+        String url = Endpoints.currentDeckStateUrl.replace("<<deck_id>>", sharedData.newDeckData.getDeckId());
+        log.info("Try to get current state by url - "+url);
+        return given()
+                .get(url)
+                .getBody()
+                .as(NewDeckDto.class);
     }
 
     private NewDeckDto getNewShuffledDeckId() {
-        System.out.println(("Try to get new deck by url " + Endpoints.newShuffledDeckUrl));
+        log.info(("Try to get new deck by url " + Endpoints.newShuffledDeckUrl));
         NewDeckDto newDeckData = given()
                 .get(Endpoints.newShuffledDeckUrl).getBody().as(NewDeckDto.class);
-        System.out.println("newDeckData.getDeckId() - " + newDeckData.getDeckId());
         return newDeckData;
     }
 
     private DrawCardDto drawCards(int numberOfCardsToDraw) {
         String url = Endpoints.drawCardUrl.replace("<<deck_id>>", sharedData.newDeckData.getDeckId()) + String.valueOf(numberOfCardsToDraw);
-        System.out.println("Try to draw cards bu url " + url);
+        log.info("Try to draw cards by url " + url);
         DrawCardDto drawCardDto = given().get(url).getBody().as(DrawCardDto.class);
         return drawCardDto;
     }
