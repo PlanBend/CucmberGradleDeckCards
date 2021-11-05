@@ -13,3 +13,18 @@ Feature: Check card counts in a deck
       | 51          | 1       |
       | 52          | 0       |
       | 53          | -1      |
+
+  Scenario: Check no card left after drawing
+    Given new shuffled card deck
+    And draw 53 cards
+    Then should be an error "Not enough cards remaining to draw 53 additional"
+    #actually looks like a bug, because only 1 is additional
+
+  Scenario: Check limited card in deck
+    Given new card deck contains only "AS,AD,AC,AH,AS,AD,AC,AH"Try to draw cards bu url
+    Then check if deck contains only "AS,AD,AC,AH"
+
+  Scenario: Check if used cards not in deck
+    Given new shuffled card deck
+    And draw 5 cards
+    Then check if deck not contains used cards

@@ -17,6 +17,8 @@ dependencies {
     implementation 'junit:junit:4.12'
     implementation 'io.cucumber:cucumber-core:' + cucumberVersion
     implementation 'io.cucumber:cucumber-java:' + cucumberVersion
+    implementation 'org.projectlombok:lombok:1.18.16'
+    implementation 'junit:junit:4.12'
     testImplementation 'io.cucumber:cucumber-junit:' + cucumberVersion
     implementation 'io.cucumber:cucumber-guice:'+cucumberVersion
     implementation 'io.rest-assured:rest-assured:4.4.0'
