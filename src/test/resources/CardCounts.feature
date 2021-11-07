@@ -3,7 +3,7 @@ Feature: Check card counts in a deck
   Scenario Outline: Check card counts after drawing
     Given new shuffled card deck
     And draw <someNumbers> cards
-    Then deck cards left is <remains>
+    Then <remains> cards left in deck
 
     Examples:
       | someNumbers | remains |
@@ -26,4 +26,4 @@ Feature: Check card counts in a deck
   Scenario: Check if used cards not in deck
     Given new shuffled card deck
     And draw 5 cards
-    Then check if deck not contains used cards
+    Then deck should not contain drawn cards
