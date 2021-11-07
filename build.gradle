@@ -41,7 +41,7 @@ task cucumber() {
         javaexec {
             main = "io.cucumber.core.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
-            args = ['--plugin', 'html:reports/test-report', '--plugin', 'pretty', '--plugin' , 'io.qameta.allure.cucumber5jvm.AllureCucumber5Jvm', '--glue', 'org.deckOfCardTests', 'src/test/resources']
+            args = ['--plugin', 'html:reports/test-report', '--plugin', 'pretty', '--plugin', 'html:target/cucumber-reports', '--glue', 'org.deckOfCardTests', 'src/test/resources']
         }
     }
 }
